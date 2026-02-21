@@ -1,0 +1,357 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d3" for="edge" attr.name="raw_on" attr.type="string"/>
+<key id="d2" for="edge" attr.name="evidence" attr.type="string"/>
+<key id="d1" for="edge" attr.name="best_score" attr.type="double"/>
+<key id="d0" for="edge" attr.name="weight" attr.type="double"/>
+<graph edgedefault="directed"><node id="person"/>
+<node id="employee"/>
+<node id="inserted"/>
+<node id="businessentitycontact"/>
+<node id="purchaseorderheader"/>
+<node id="purchaseorderdetail"/>
+<node id="salesorderheader"/>
+<node id="customer"/>
+<node id="sales"/>
+<node id="soh"/>
+<node id="c"/>
+<node id="salesorderdetail"/>
+<node id="deleted"/>
+<node id="salesperson"/>
+<node id="salesterritory"/>
+<node id="address"/>
+<node id="businessentityaddress"/>
+<node id="countryregion"/>
+<node id="stateprovince"/>
+<node id="personphone"/>
+<node id="phonenumbertype"/>
+<node id="employeedepartmenthistory"/>
+<node id="department"/>
+<node id="store"/>
+<node id="vendor"/>
+<node id="addresstype"/>
+<node id="emailaddress"/>
+<node id="product"/>
+<node id="productmodel"/>
+<node id="productmodelproductdescriptionculture"/>
+<node id="productdescription"/>
+<node id="productlistpricehistory"/>
+<node id="productcosthistory"/>
+<node id="by"/>
+<node id="billofmaterials"/>
+<node id="bom_cte"/>
+<node id="organizationnode"/>
+<edge source="person" target="employee">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">p.[BusinessEntityID] = e.[BusinessEntityID]
+    INNER</data>
+</edge>
+<edge source="person" target="inserted">
+  <data key="d0">0.096</data>
+  <data key="d1">0.904</data>
+  <data key="d2">join</data>
+  <data key="d3">WHERE [Person].[Person].[BusinessEntityID] = inserted.[BusinessEntityID]
+            AND inserted.[Demographics] IS NULL</data>
+</edge>
+<edge source="person" target="businessentitycontact">
+  <data key="d0">0.151</data>
+  <data key="d1">0.849</data>
+  <data key="d2">join</data>
+  <data key="d3">p.[BusinessEntityID] = bec.[PersonID]
+	LEFT OUTER</data>
+</edge>
+<edge source="employee" target="salesperson">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">e.[BusinessEntityID] = s.[BusinessEntityID]
+	INNER</data>
+</edge>
+<edge source="employee" target="organizationnode">
+  <data key="d0">0.19</data>
+  <data key="d1">0.81</data>
+  <data key="d2">join</data>
+  <data key="d3">e.[OrganizationNode] = [EMP_cte].[OrganizationNode].GetAncestor(1)
+            INNER</data>
+</edge>
+<edge source="inserted" target="purchaseorderdetail">
+  <data key="d0">0.096</data>
+  <data key="d1">0.904</data>
+  <data key="d2">join</data>
+  <data key="d3">WHERE inserted.[PurchaseOrderID] = [Purchasing].[PurchaseOrderDetail].[PurchaseOrderID]
+                AND inserted.[PurchaseOrderDetailID] = [Purchasing].[PurchaseOrderDetail].[PurchaseOrderDetailID]</data>
+</edge>
+<edge source="inserted" target="soh">
+  <data key="d0">0.096</data>
+  <data key="d1">0.904</data>
+  <data key="d2">join</data>
+  <data key="d3">INNER JOIN [Sales].[SalesOrderHeader] AS SOH
+                ON inserted.[SalesOrderID] = SOH.[SalesOrderID]
+                INNER JOIN [Sales].[Customer] AS C
+                ON SOH.[CustomerID] = C.[CustomerID]
+            WHERE C.[PersonID] = [Person].[Person].[BusinessEntityID]</data>
+</edge>
+<edge source="businessentitycontact" target="store">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">bec.[BusinessEntityID] = s.[BusinessEntityID]
+	INNER</data>
+</edge>
+<edge source="businessentitycontact" target="vendor">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">bec.[BusinessEntityID] = v.[BusinessEntityID]
+	INNER</data>
+</edge>
+<edge source="purchaseorderheader" target="purchaseorderdetail">
+  <data key="d0">0.096</data>
+  <data key="d1">0.904</data>
+  <data key="d2">join</data>
+  <data key="d3">WHERE [Purchasing].[PurchaseOrderHeader].[PurchaseOrderID] = [Purchasing].[PurchaseOrderDetail].[PurchaseOrderID])
+        WHERE [Purchasing].[PurchaseOrderHeader].[PurchaseOrderID] IN (SELECT inserted.[PurchaseOrderID] FROM inserted)</data>
+</edge>
+<edge source="salesorderheader" target="customer">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">SOH.[CustomerID] = C.[CustomerID]</data>
+</edge>
+<edge source="salesorderheader" target="salesorderdetail">
+  <data key="d0">0.096</data>
+  <data key="d1">0.904</data>
+  <data key="d2">join</data>
+  <data key="d3">WHERE [Sales].[SalesOrderHeader].[SalesOrderID] = [Sales].[SalesOrderDetail].[SalesOrderID])
+        WHERE [Sales].[SalesOrderHeader].[SalesOrderID] IN (SELECT inserted.[SalesOrderID] FROM inserted)</data>
+</edge>
+<edge source="salesorderheader" target="employee">
+  <data key="d0">0.137</data>
+  <data key="d1">0.863</data>
+  <data key="d2">join</data>
+  <data key="d3">soh.[SalesPersonID] = e.[BusinessEntityID]
+		INNER</data>
+</edge>
+<edge source="customer" target="salesorderheader">
+  <data key="d0">0.096</data>
+  <data key="d1">0.904</data>
+  <data key="d2">join</data>
+  <data key="d3">INNER JOIN [Sales].[SalesOrderHeader]
+            ON deleted.[SalesOrderID] = [Sales].[SalesOrderHeader].[SalesOrderID]
+            INNER JOIN [Sales].[Customer]
+            ON [Sales].[Customer].[CustomerID] = [Sales].[SalesOrderHeader].[CustomerID]
+        WHERE [Sales].[Customer].[PersonID] = [Person].[Person].[BusinessEntityID]</data>
+</edge>
+<edge source="customer" target="sales">
+  <data key="d0">0.211</data>
+  <data key="d1">0.789</data>
+  <data key="d2">join</data>
+  <data key="d3">[Sales].[Customer].[CustomerID] = [Sales].[Sales</data>
+</edge>
+<edge source="customer" target="person">
+  <data key="d0">0.151</data>
+  <data key="d1">0.849</data>
+  <data key="d2">join</data>
+  <data key="d3">c.[PersonID] = p.[BusinessEntityID]</data>
+</edge>
+<edge source="soh" target="c">
+  <data key="d0">0.096</data>
+  <data key="d1">0.904</data>
+  <data key="d2">join</data>
+  <data key="d3">INNER JOIN [Sales].[SalesOrderHeader] AS SOH
+                ON inserted.[SalesOrderID] = SOH.[SalesOrderID]
+                INNER JOIN [Sales].[Customer] AS C
+                ON SOH.[CustomerID] = C.[CustomerID]
+            WHERE C.[PersonID] = [Person].[Person].[BusinessEntityID]</data>
+</edge>
+<edge source="c" target="person">
+  <data key="d0">0.183</data>
+  <data key="d1">0.817</data>
+  <data key="d2">join</data>
+  <data key="d3">INNER JOIN [Sales].[SalesOrderHeader] AS SOH
+                ON inserted.[SalesOrderID] = SOH.[SalesOrderID]
+                INNER JOIN [Sales].[Customer] AS C
+                ON SOH.[CustomerID] = C.[CustomerID]
+            WHERE C.[PersonID] = [Person].[Person].[BusinessEntityID]</data>
+</edge>
+<edge source="deleted" target="salesorderheader">
+  <data key="d0">0.096</data>
+  <data key="d1">0.904</data>
+  <data key="d2">join</data>
+  <data key="d3">INNER JOIN [Sales].[SalesOrderHeader]
+            ON deleted.[SalesOrderID] = [Sales].[SalesOrderHeader].[SalesOrderID]
+            INNER JOIN [Sales].[Customer]
+            ON [Sales].[Customer].[CustomerID] = [Sales].[SalesOrderHeader].[CustomerID]
+        WHERE [Sales].[Customer].[PersonID] = [Person].[Person].[BusinessEntityID]</data>
+</edge>
+<edge source="salesperson" target="salesorderheader">
+  <data key="d0">0.137</data>
+  <data key="d1">0.863</data>
+  <data key="d2">join</data>
+  <data key="d3">sp.[BusinessEntityID] = soh.[SalesPersonID]
+        INNER</data>
+</edge>
+<edge source="salesterritory" target="salesperson">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">st.[TerritoryID] = s.[TerritoryID]
+	LEFT OUTER</data>
+</edge>
+<edge source="salesterritory" target="salesorderheader">
+  <data key="d0">0.096</data>
+  <data key="d1">0.904</data>
+  <data key="d2">join</data>
+  <data key="d3">WHERE [Sales].[SalesTerritory].[TerritoryID] = [Sales].[SalesOrderHeader].[TerritoryID]
+                    AND ([Sales].[SalesOrderHeader].[Status] = 5) -- Shipped
+                    AND [Sales].[SalesOrderHeader].[OrderDate] BETWEEN @StartDate AND @EndDate)
+            WHERE [Sales].[SalesTerritory].[TerritoryID]
+                IN (SELECT DISTINCT inserted.[TerritoryID] FROM inserted
+                    WHERE inserted.[OrderDate] BETWEEN @StartDate AND @EndDate)</data>
+</edge>
+<edge source="address" target="businessentityaddress">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">a.[AddressID] = bea.[AddressID]
+    INNER</data>
+</edge>
+<edge source="businessentityaddress" target="person">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">bea.[BusinessEntityID] = p.[BusinessEntityID]
+    INNER</data>
+</edge>
+<edge source="businessentityaddress" target="salesperson">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">bea.[BusinessEntityID] = s.[BusinessEntityID]
+    INNER</data>
+</edge>
+<edge source="businessentityaddress" target="store">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">bea.[BusinessEntityID] = s.[BusinessEntityID]
+    INNER</data>
+</edge>
+<edge source="businessentityaddress" target="vendor">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">bea.[BusinessEntityID] = v.[BusinessEntityID]
+    INNER</data>
+</edge>
+<edge source="countryregion" target="stateprovince">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">cr.[CountryRegionCode] = sp.[CountryRegionCode]
+    LEFT OUTER</data>
+</edge>
+<edge source="stateprovince" target="address">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">sp.[StateProvinceID] = a.[StateProvinceID]
+    INNER</data>
+</edge>
+<edge source="stateprovince" target="countryregion">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">sp.[CountryRegionCode] = cr.[CountryRegionCode]</data>
+</edge>
+<edge source="personphone" target="phonenumbertype">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">pp.[PhoneNumberTypeID] = pnt.[PhoneNumberTypeID]
+    LEFT OUTER</data>
+</edge>
+<edge source="personphone" target="person">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">pp.[BusinessEntityID] = p.[BusinessEntityID]
+	LEFT OUTER</data>
+</edge>
+<edge source="phonenumbertype" target="personphone">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">pnt.[PhoneNumberTypeID] = pp.[PhoneNumberTypeID]</data>
+</edge>
+<edge source="employeedepartmenthistory" target="department">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">edh.[DepartmentID] = d.[DepartmentID]</data>
+</edge>
+<edge source="addresstype" target="businessentityaddress">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">at.[AddressTypeID] = bea.[AddressTypeID]
+	INNER</data>
+</edge>
+<edge source="emailaddress" target="person">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">ea.[BusinessEntityID] = p.[BusinessEntityID]
+	LEFT OUTER</data>
+</edge>
+<edge source="product" target="productmodel">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">p.[ProductModelID] = pm.[ProductModelID]
+    INNER</data>
+</edge>
+<edge source="product" target="productlistpricehistory">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">p.[ProductID] = plph.[ProductID]
+            AND p.[ProductID] = @ProductID
+            AND @</data>
+</edge>
+<edge source="product" target="productcosthistory">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">p.[ProductID] = pch.[ProductID]
+            AND p.[ProductID] = @ProductID
+            AND @</data>
+</edge>
+<edge source="productmodelproductdescriptionculture" target="productdescription">
+  <data key="d0">0.064</data>
+  <data key="d1">0.936</data>
+  <data key="d2">join</data>
+  <data key="d3">pmx.[ProductDescriptionID] = pd.[ProductDescriptionID]</data>
+</edge>
+<edge source="by" target="product">
+  <data key="d0">0.096</data>
+  <data key="d1">0.904</data>
+  <data key="d2">join</data>
+  <data key="d3">b.[ProductAssemblyID] = p.[ProductID]</data>
+</edge>
+<edge source="billofmaterials" target="bom_cte">
+  <data key="d0">0.163</data>
+  <data key="d1">0.837</data>
+  <data key="d2">join</data>
+  <data key="d3">b.[ProductAssemblyID] = cte.[ComponentID]
+            INNER</data>
+</edge>
+<edge source="bom_cte" target="billofmaterials">
+  <data key="d0">0.163</data>
+  <data key="d1">0.837</data>
+  <data key="d2">join</data>
+  <data key="d3">cte.[ProductAssemblyID] = b.[ComponentID]
+            INNER</data>
+</edge>
+</graph></graphml>

@@ -1,0 +1,407 @@
+[
+  {
+    "from_table": "person",
+    "from_col": "businessentityid",
+    "to_table": "employee",
+    "to_col": "businessentityid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "p.[BusinessEntityID] = e.[BusinessEntityID]\n    INNER"
+  },
+  {
+    "from_table": "person",
+    "from_col": "businessentityid",
+    "to_table": "inserted",
+    "to_col": "businessentityid",
+    "score": 0.904,
+    "evidence": "join",
+    "raw_on": "WHERE [Person].[Person].[BusinessEntityID] = inserted.[BusinessEntityID]\n            AND inserted.[Demographics] IS NULL"
+  },
+  {
+    "from_table": "person",
+    "from_col": "businessentityid",
+    "to_table": "businessentitycontact",
+    "to_col": "personid",
+    "score": 0.849,
+    "evidence": "join",
+    "raw_on": "p.[BusinessEntityID] = bec.[PersonID]\n\tLEFT OUTER"
+  },
+  {
+    "from_table": "purchaseorderheader",
+    "from_col": "purchaseorderid",
+    "to_table": "purchaseorderdetail",
+    "to_col": "purchaseorderid",
+    "score": 0.904,
+    "evidence": "join",
+    "raw_on": "WHERE [Purchasing].[PurchaseOrderHeader].[PurchaseOrderID] = [Purchasing].[PurchaseOrderDetail].[PurchaseOrderID])\n        WHERE [Purchasing].[PurchaseOrderHeader].[PurchaseOrderID] IN (SELECT inserted.[PurchaseOrderID] FROM inserted)"
+  },
+  {
+    "from_table": "inserted",
+    "from_col": "purchaseorderid",
+    "to_table": "purchaseorderdetail",
+    "to_col": "purchaseorderid",
+    "score": 0.904,
+    "evidence": "join",
+    "raw_on": "WHERE inserted.[PurchaseOrderID] = [Purchasing].[PurchaseOrderDetail].[PurchaseOrderID]\n                AND inserted.[PurchaseOrderDetailID] = [Purchasing].[PurchaseOrderDetail].[PurchaseOrderDetailID]"
+  },
+  {
+    "from_table": "inserted",
+    "from_col": "purchaseorderdetailid",
+    "to_table": "purchaseorderdetail",
+    "to_col": "purchaseorderdetailid",
+    "score": 0.904,
+    "evidence": "join",
+    "raw_on": "WHERE inserted.[PurchaseOrderID] = [Purchasing].[PurchaseOrderDetail].[PurchaseOrderID]\n                AND inserted.[PurchaseOrderDetailID] = [Purchasing].[PurchaseOrderDetail].[PurchaseOrderDetailID]"
+  },
+  {
+    "from_table": "salesorderheader",
+    "from_col": "customerid",
+    "to_table": "customer",
+    "to_col": "customerid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "SOH.[CustomerID] = C.[CustomerID]"
+  },
+  {
+    "from_table": "customer",
+    "from_col": "customerid",
+    "to_table": "salesorderheader",
+    "to_col": "customerid",
+    "score": 0.904,
+    "evidence": "join",
+    "raw_on": "INNER JOIN [Sales].[SalesOrderHeader]\n            ON deleted.[SalesOrderID] = [Sales].[SalesOrderHeader].[SalesOrderID]\n            INNER JOIN [Sales].[Customer]\n            ON [Sales].[Customer].[CustomerID] = [Sales].[SalesOrderHeader].[CustomerID]\n        WHERE [Sales].[Customer].[PersonID] = [Person].[Person].[BusinessEntityID]"
+  },
+  {
+    "from_table": "customer",
+    "from_col": "customerid",
+    "to_table": "sales",
+    "to_col": "sales",
+    "score": 0.789,
+    "evidence": "join",
+    "raw_on": "[Sales].[Customer].[CustomerID] = [Sales].[Sales"
+  },
+  {
+    "from_table": "inserted",
+    "from_col": "salesorderid",
+    "to_table": "soh",
+    "to_col": "salesorderid",
+    "score": 0.904,
+    "evidence": "join",
+    "raw_on": "INNER JOIN [Sales].[SalesOrderHeader] AS SOH\n                ON inserted.[SalesOrderID] = SOH.[SalesOrderID]\n                INNER JOIN [Sales].[Customer] AS C\n                ON SOH.[CustomerID] = C.[CustomerID]\n            WHERE C.[PersonID] = [Person].[Person].[BusinessEntityID]"
+  },
+  {
+    "from_table": "soh",
+    "from_col": "customerid",
+    "to_table": "c",
+    "to_col": "customerid",
+    "score": 0.904,
+    "evidence": "join",
+    "raw_on": "INNER JOIN [Sales].[SalesOrderHeader] AS SOH\n                ON inserted.[SalesOrderID] = SOH.[SalesOrderID]\n                INNER JOIN [Sales].[Customer] AS C\n                ON SOH.[CustomerID] = C.[CustomerID]\n            WHERE C.[PersonID] = [Person].[Person].[BusinessEntityID]"
+  },
+  {
+    "from_table": "c",
+    "from_col": "personid",
+    "to_table": "person",
+    "to_col": "businessentityid",
+    "score": 0.817,
+    "evidence": "join",
+    "raw_on": "INNER JOIN [Sales].[SalesOrderHeader] AS SOH\n                ON inserted.[SalesOrderID] = SOH.[SalesOrderID]\n                INNER JOIN [Sales].[Customer] AS C\n                ON SOH.[CustomerID] = C.[CustomerID]\n            WHERE C.[PersonID] = [Person].[Person].[BusinessEntityID]"
+  },
+  {
+    "from_table": "salesorderheader",
+    "from_col": "salesorderid",
+    "to_table": "salesorderdetail",
+    "to_col": "salesorderid",
+    "score": 0.904,
+    "evidence": "join",
+    "raw_on": "WHERE [Sales].[SalesOrderHeader].[SalesOrderID] = [Sales].[SalesOrderDetail].[SalesOrderID])\n        WHERE [Sales].[SalesOrderHeader].[SalesOrderID] IN (SELECT inserted.[SalesOrderID] FROM inserted)"
+  },
+  {
+    "from_table": "deleted",
+    "from_col": "salesorderid",
+    "to_table": "salesorderheader",
+    "to_col": "salesorderid",
+    "score": 0.904,
+    "evidence": "join",
+    "raw_on": "INNER JOIN [Sales].[SalesOrderHeader]\n            ON deleted.[SalesOrderID] = [Sales].[SalesOrderHeader].[SalesOrderID]\n            INNER JOIN [Sales].[Customer]\n            ON [Sales].[Customer].[CustomerID] = [Sales].[SalesOrderHeader].[CustomerID]\n        WHERE [Sales].[Customer].[PersonID] = [Person].[Person].[BusinessEntityID]"
+  },
+  {
+    "from_table": "customer",
+    "from_col": "personid",
+    "to_table": "person",
+    "to_col": "businessentityid",
+    "score": 0.849,
+    "evidence": "join",
+    "raw_on": "c.[PersonID] = p.[BusinessEntityID]"
+  },
+  {
+    "from_table": "salesperson",
+    "from_col": "businessentityid",
+    "to_table": "salesorderheader",
+    "to_col": "salespersonid",
+    "score": 0.863,
+    "evidence": "join",
+    "raw_on": "sp.[BusinessEntityID] = soh.[SalesPersonID]\n        INNER"
+  },
+  {
+    "from_table": "salesterritory",
+    "from_col": "territoryid",
+    "to_table": "salesperson",
+    "to_col": "territoryid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "st.[TerritoryID] = s.[TerritoryID]\n\tLEFT OUTER"
+  },
+  {
+    "from_table": "salesterritory",
+    "from_col": "territoryid",
+    "to_table": "salesorderheader",
+    "to_col": "territoryid",
+    "score": 0.904,
+    "evidence": "join",
+    "raw_on": "WHERE [Sales].[SalesTerritory].[TerritoryID] = [Sales].[SalesOrderHeader].[TerritoryID]\n                    AND ([Sales].[SalesOrderHeader].[Status] = 5) -- Shipped\n                    AND [Sales].[SalesOrderHeader].[OrderDate] BETWEEN @StartDate AND @EndDate)\n            WHERE [Sales].[SalesTerritory].[TerritoryID]\n                IN (SELECT DISTINCT inserted.[TerritoryID] FROM inserted\n                    WHERE inserted.[OrderDate] BETWEEN @StartDate AND @EndDate)"
+  },
+  {
+    "from_table": "address",
+    "from_col": "addressid",
+    "to_table": "businessentityaddress",
+    "to_col": "addressid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "a.[AddressID] = bea.[AddressID]\n    INNER"
+  },
+  {
+    "from_table": "countryregion",
+    "from_col": "countryregioncode",
+    "to_table": "stateprovince",
+    "to_col": "countryregioncode",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "cr.[CountryRegionCode] = sp.[CountryRegionCode]\n    LEFT OUTER"
+  },
+  {
+    "from_table": "personphone",
+    "from_col": "phonenumbertypeid",
+    "to_table": "phonenumbertype",
+    "to_col": "phonenumbertypeid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "pp.[PhoneNumberTypeID] = pnt.[PhoneNumberTypeID]\n    LEFT OUTER"
+  },
+  {
+    "from_table": "employeedepartmenthistory",
+    "from_col": "departmentid",
+    "to_table": "department",
+    "to_col": "departmentid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "edh.[DepartmentID] = d.[DepartmentID]"
+  },
+  {
+    "from_table": "businessentityaddress",
+    "from_col": "businessentityid",
+    "to_table": "person",
+    "to_col": "businessentityid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "bea.[BusinessEntityID] = p.[BusinessEntityID]\n    INNER"
+  },
+  {
+    "from_table": "businessentityaddress",
+    "from_col": "businessentityid",
+    "to_table": "salesperson",
+    "to_col": "businessentityid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "bea.[BusinessEntityID] = s.[BusinessEntityID]\n    INNER"
+  },
+  {
+    "from_table": "businessentityaddress",
+    "from_col": "businessentityid",
+    "to_table": "store",
+    "to_col": "businessentityid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "bea.[BusinessEntityID] = s.[BusinessEntityID]\n    INNER"
+  },
+  {
+    "from_table": "businessentityaddress",
+    "from_col": "businessentityid",
+    "to_table": "vendor",
+    "to_col": "businessentityid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "bea.[BusinessEntityID] = v.[BusinessEntityID]\n    INNER"
+  },
+  {
+    "from_table": "stateprovince",
+    "from_col": "stateprovinceid",
+    "to_table": "address",
+    "to_col": "stateprovinceid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "sp.[StateProvinceID] = a.[StateProvinceID]\n    INNER"
+  },
+  {
+    "from_table": "addresstype",
+    "from_col": "addresstypeid",
+    "to_table": "businessentityaddress",
+    "to_col": "addresstypeid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "at.[AddressTypeID] = bea.[AddressTypeID]\n\tINNER"
+  },
+  {
+    "from_table": "emailaddress",
+    "from_col": "businessentityid",
+    "to_table": "person",
+    "to_col": "businessentityid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "ea.[BusinessEntityID] = p.[BusinessEntityID]\n\tLEFT OUTER"
+  },
+  {
+    "from_table": "phonenumbertype",
+    "from_col": "phonenumbertypeid",
+    "to_table": "personphone",
+    "to_col": "phonenumbertypeid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "pnt.[PhoneNumberTypeID] = pp.[PhoneNumberTypeID]"
+  },
+  {
+    "from_table": "product",
+    "from_col": "productmodelid",
+    "to_table": "productmodel",
+    "to_col": "productmodelid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "p.[ProductModelID] = pm.[ProductModelID]\n    INNER"
+  },
+  {
+    "from_table": "productmodelproductdescriptionculture",
+    "from_col": "productdescriptionid",
+    "to_table": "productdescription",
+    "to_col": "productdescriptionid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "pmx.[ProductDescriptionID] = pd.[ProductDescriptionID]"
+  },
+  {
+    "from_table": "employee",
+    "from_col": "businessentityid",
+    "to_table": "salesperson",
+    "to_col": "businessentityid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "e.[BusinessEntityID] = s.[BusinessEntityID]\n\tINNER"
+  },
+  {
+    "from_table": "personphone",
+    "from_col": "businessentityid",
+    "to_table": "person",
+    "to_col": "businessentityid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "pp.[BusinessEntityID] = p.[BusinessEntityID]\n\tLEFT OUTER"
+  },
+  {
+    "from_table": "salesorderheader",
+    "from_col": "salespersonid",
+    "to_table": "employee",
+    "to_col": "businessentityid",
+    "score": 0.863,
+    "evidence": "join",
+    "raw_on": "soh.[SalesPersonID] = e.[BusinessEntityID]\n\t\tINNER"
+  },
+  {
+    "from_table": "stateprovince",
+    "from_col": "countryregioncode",
+    "to_table": "countryregion",
+    "to_col": "countryregioncode",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "sp.[CountryRegionCode] = cr.[CountryRegionCode]"
+  },
+  {
+    "from_table": "businessentitycontact",
+    "from_col": "businessentityid",
+    "to_table": "store",
+    "to_col": "businessentityid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "bec.[BusinessEntityID] = s.[BusinessEntityID]\n\tINNER"
+  },
+  {
+    "from_table": "businessentitycontact",
+    "from_col": "businessentityid",
+    "to_table": "vendor",
+    "to_col": "businessentityid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "bec.[BusinessEntityID] = v.[BusinessEntityID]\n\tINNER"
+  },
+  {
+    "from_table": "product",
+    "from_col": "productid",
+    "to_table": "productlistpricehistory",
+    "to_col": "productid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "p.[ProductID] = plph.[ProductID]\n            AND p.[ProductID] = @ProductID\n            AND @"
+  },
+  {
+    "from_table": "product",
+    "from_col": "productid",
+    "to_table": "productcosthistory",
+    "to_col": "productid",
+    "score": 0.936,
+    "evidence": "join",
+    "raw_on": "p.[ProductID] = pch.[ProductID]\n            AND p.[ProductID] = @ProductID\n            AND @"
+  },
+  {
+    "from_table": "by",
+    "from_col": "componentid",
+    "to_table": "product",
+    "to_col": "productid",
+    "score": 0.866,
+    "evidence": "join",
+    "raw_on": "b.[ComponentID] = p.[ProductID]"
+  },
+  {
+    "from_table": "billofmaterials",
+    "from_col": "productassemblyid",
+    "to_table": "bom_cte",
+    "to_col": "componentid",
+    "score": 0.837,
+    "evidence": "join",
+    "raw_on": "b.[ProductAssemblyID] = cte.[ComponentID]\n            INNER"
+  },
+  {
+    "from_table": "employee",
+    "from_col": "organizationnode",
+    "to_table": "organizationnode",
+    "to_col": "getancestor",
+    "score": 0.81,
+    "evidence": "join",
+    "raw_on": "e.[OrganizationNode] = [EMP_cte].[OrganizationNode].GetAncestor(1)\n            INNER"
+  },
+  {
+    "from_table": "by",
+    "from_col": "productassemblyid",
+    "to_table": "product",
+    "to_col": "productid",
+    "score": 0.904,
+    "evidence": "join",
+    "raw_on": "b.[ProductAssemblyID] = p.[ProductID]"
+  },
+  {
+    "from_table": "bom_cte",
+    "from_col": "productassemblyid",
+    "to_table": "billofmaterials",
+    "to_col": "componentid",
+    "score": 0.837,
+    "evidence": "join",
+    "raw_on": "cte.[ProductAssemblyID] = b.[ComponentID]\n            INNER"
+  }
+]
